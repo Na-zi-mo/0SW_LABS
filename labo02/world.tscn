@@ -7,7 +7,7 @@
 
 [node name="Player" parent="." instance=ExtResource("1_c0jwr")]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Background" type="Sprite2D" parent="."]
 show_behind_parent = true
 scale = Vector2(1.25217, 1.38136)
 texture = ExtResource("2_spy7y")
