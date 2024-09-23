@@ -7,6 +7,8 @@ extends Node2D
 var mass : float = 1.0    
 const top_speed = 200
 
+@export var bullet_scene : PackedScene
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -18,6 +20,9 @@ func spawn() :
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float):
+	if Input.is_action_just_pressed("shoot"):
+		shoot()
+	
 	if Input.is_action_pressed("left"):
 		rotation -= rotation_speed * delta
 	
@@ -25,7 +30,7 @@ func _physics_process(delta: float):
 		rotation += rotation_speed * delta
 	
 	if Input.is_action_pressed("forward"):		
-		var direction = Vector2(cos(rotation), sin(rotation)).rotated(-PI / 2)
+		var direction = Vector2(cos(rotation), sin(rotation))
 		#position += direction * move_speed * delta
 		var force = direction * 1.5
 		apply_force(force)
@@ -52,3 +57,8 @@ func update_position(delta):
 	velocity = velocity.limit_length(top_speed)  
 	position += velocity * delta
 	acceleration = Vector2()
+
+func shoot():
+	var b = bullet_scene.instantiate()
+	get_parent().add_child(b)
+	b.global_transform = $Muzzle.global_transform
