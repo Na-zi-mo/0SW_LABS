@@ -1,8 +1,11 @@
 extends Node2D
 
 @export var velocity = Vector2()
+@export var acceleration = Vector2()
 @export var rotation_speed = 2.0
 @export var move_speed = 200.0 
+var mass : float = 1.0    
+const top_speed = 100
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -10,8 +13,8 @@ func _ready():
 	spawn()
 
 func spawn() :
-	position = Vector2(randf_range(50, get_viewport_rect().size.x), randf_range(50, get_viewport_rect().size.y))
-
+	position = Vector2(randf_range(50, get_viewport_rect().size.x -50), randf_range(50, get_viewport_rect().size.y-50))
+	#position = Vector2(150,150)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
@@ -23,8 +26,11 @@ func _process(delta: float):
 	
 	if Input.is_action_pressed("forward"):		
 		var direction = Vector2(cos(rotation), sin(rotation)).rotated(-PI / 2)
-		position += direction * move_speed * delta
+		#position += direction * move_speed * delta
+		var force = direction 
+		apply_force(force)
 		
+	update_position(delta)
 	wrap_around_screen()
 
 func wrap_around_screen() :
@@ -37,3 +43,13 @@ func wrap_around_screen() :
 		position.y = 0
 	elif position.y < 0:
 		position.y = get_viewport_rect().size.y
+
+
+func apply_force(force: Vector2):
+	acceleration += force / mass  
+
+func update_position(delta):
+	velocity += acceleration  
+	velocity = velocity.limit_length(top_speed)  
+	position += velocity * delta
+	acceleration = Vector2()
