@@ -21,6 +21,10 @@ func spawn() :
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float):
 	$Fire.visible = false
+	
+	if Input.is_action_just_pressed("restart"):
+		get_tree().reload_current_scene()
+	
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
 	
