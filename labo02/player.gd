@@ -20,6 +20,7 @@ func spawn() :
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float):
+	$Fire.visible = false
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
 	
@@ -33,8 +34,9 @@ func _physics_process(delta: float):
 		var direction = Vector2(cos(rotation), sin(rotation))
 		#position += direction * move_speed * delta
 		var force = direction * 1.5
+		$Fire.visible = true
 		apply_force(force)
-		
+	
 	update_position(delta)
 	wrap_around_screen()
 
