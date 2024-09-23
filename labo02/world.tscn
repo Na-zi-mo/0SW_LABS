@@ -1,3 +1,14 @@
-[gd_scene format=3 uid="uid://bcn86iijl7p34"]
+[gd_scene load_steps=3 format=3 uid="uid://bcn86iijl7p34"]
+
+[ext_resource type="PackedScene" uid="uid://e4ce3ajdbjo2" path="res://player.tscn" id="1_c0jwr"]
+[ext_resource type="Texture2D" uid="uid://cob1hs64bkbrj" path="res://assets/nebula-space-texture-blue-atmosphere.png" id="2_spy7y"]
 
 [node name="World" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_c0jwr")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+show_behind_parent = true
+scale = Vector2(1.25217, 1.38136)
+texture = ExtResource("2_spy7y")
+centered = false
