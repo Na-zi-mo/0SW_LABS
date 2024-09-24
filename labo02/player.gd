@@ -2,7 +2,7 @@ extends Node2D
 
 @export var velocity = Vector2()
 @export var acceleration = Vector2()
-@export var rotation_speed = 2.0
+@export var rotation_speed = 5.0
 @export var move_speed = 200.0 
 var mass : float = 1.0    
 const top_speed = 200
@@ -37,7 +37,7 @@ func _physics_process(delta: float):
 	if Input.is_action_pressed("forward"):		
 		var direction = Vector2(cos(rotation), sin(rotation))
 		#position += direction * move_speed * delta
-		var force = direction * 1.5
+		var force = direction * 2
 		$Fire.visible = true
 		apply_force(force)
 	
