@@ -1,5 +1,6 @@
 extends Node2D
 
+@export var max_boids : int = 20
 @export_range(3, 500, 2) var num_boids : int = randi_range(10,20)  # Nombre cible de boids
 
 @export var debugging : bool = false :
@@ -29,7 +30,7 @@ func _ready():
 	adjust_boids()  # Ajuste le nombre de boids initialement
 	set_debug()
 	update_forces()
-	num_boids = 20
+	num_boids = max_boids
 
 # Ajuste dynamiquement le nombre de boids pour correspondre à "num_boids"
 func adjust_boids():
@@ -74,10 +75,16 @@ func set_debug():
 # Cette fonction peut être appelée à tout moment pour ajuster le nombre de boids
 func _physics_process(delta):
 	manage_inputs()
-	
+	print(get_children().filter(func(n): return n is BoidTest).size())
 	# Appel d'ajustement pour synchroniser le nombre de boids si le champ change
-	if num_boids != get_children().filter(func(n): return n is BoidTest).size():
-		adjust_boids()
+	#if num_boids != get_children().filter(func(n): return n is BoidTest).size():
+		#adjust_boids()
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if num_boids > get_children().filter(func(n): return n is BoidTest).size():
+				add_boids(1)
 
 func manage_inputs() -> void :
 	if (Input.is_action_just_pressed("quit")):
