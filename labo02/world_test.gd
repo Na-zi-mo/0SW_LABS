@@ -1,8 +1,6 @@
 extends Node2D
 
-@export_range(3, 500, 2) var num_boids : int = 20  # Nombre cible de boids
-
-var initial_num_boids : int = randi_range(10,20)
+@export_range(3, 500, 2) var num_boids : int = randi_range(10,20)  # Nombre cible de boids
 
 @export var debugging : bool = false :
 	set(value):
@@ -31,6 +29,7 @@ func _ready():
 	adjust_boids()  # Ajuste le nombre de boids initialement
 	set_debug()
 	update_forces()
+	num_boids = 20
 
 # Ajuste dynamiquement le nombre de boids pour correspondre à "num_boids"
 func adjust_boids():
