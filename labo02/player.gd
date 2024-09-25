@@ -5,6 +5,12 @@ extends Node2D
 @export var rotation_speed = 5.0
 @export var move_speed = 200.0 
 @export var distance_from_boids = 200
+
+
+var shoot_interval = 1.0 / 4.0  # 5 balles par seconde
+var time_since_last_shot = 0.0  # Chronomètre pour le tir
+
+
 var mass : float = 1.0    
 const top_speed = 200
 
@@ -21,15 +27,14 @@ func spawn() :
 		potential_spawn = Vector2(randf_range(50, get_viewport_rect().size.x -50), randf_range(50, get_viewport_rect().size.y-50))
 	position = potential_spawn
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float):
-	$Fire.visible = false
-	
+func get_input(delta):
 	if Input.is_action_just_pressed("restart"):
 		get_tree().reload_current_scene()
 	
 	if Input.is_action_just_pressed("shoot"):
-		shoot()
+		if (time_since_last_shot >= shoot_interval) :
+			shoot()
+			time_since_last_shot = 0.0 
 	
 	if Input.is_action_pressed("left"):
 		rotation -= rotation_speed * delta
@@ -43,7 +48,12 @@ func _physics_process(delta: float):
 		var force = direction * 2
 		$Fire.visible = true
 		apply_force(force)
-	
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta: float):
+	time_since_last_shot += delta  
+	get_input(delta)
+	$Fire.visible = false
 	update_position(delta)
 	wrap_around_screen()
 
