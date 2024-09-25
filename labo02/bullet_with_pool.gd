@@ -1,23 +1,6 @@
-#extends Node2D
-#
-#var speed = 750
-#
-## Called when the node enters the scene tree for the first time.
-#func _ready() -> void:
-	#pass # Replace with function body.
-#
-#
-## Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _physics_process(delta: float) -> void:
-	#position += transform.x * speed * delta
-	
-#func _on_Bullet_body_entered(body: Node2D) -> void:
-	#if body.is_in_group("ennemies"):
-		#body.queue_free()
-	#queue_free()
-
-
 extends Node2D
+
+class_name BulletWithPool
 
 var speed = 750
 
@@ -36,12 +19,8 @@ func _physics_process(delta):
 	# Déplacement du projectile
 	if visible:
 		position += transform.x * speed * delta
-		var result = is_out_of_screen()
-		if result:
-			#print("true")
-			#emit_signal("bullet_out_of_screen")
-			bullet_out_of_screen.emit(self)
-			#emit_signal("bullet_out_of_screen")
+		if is_out_of_screen():
+			emit_signal("bullet_out_of_screen")
 	# Si le projectile est hors de l'écran, émettre le signal
 	
 	
@@ -59,15 +38,11 @@ func _physics_process(delta):
 
 func _on_Bullet_body_entered(body: Node2D):
 	# Vérifier la collision avec les ennemis (ou autres objets)
-	#print(body.get_groups())
+	print(body.get_groups())
 	if body.is_in_group("ennemies"):
 		body.queue_free()  # Supprimer l'ennemi touché
-	#emit_signal("bullet_out_of_screen")  # Émettre le signal pour recycler le projectile
-	bullet_out_of_screen.emit(self)
-	#emit_signal("bullet_out_of_screen")
+	emit_signal("bullet_out_of_screen")  # Émettre le signal pour recycler le projectile
 
 func is_out_of_screen() -> bool:
-	#print("Out of screen")
 	var screen_rect = get_viewport_rect()
-	var result : bool = position.x < 0 or position.x > screen_rect.size.x or position.y < 0 or position.y > screen_rect.size.y
-	return result
+	return position.x < 0 or position.x > screen_rect.size.x or position.y < 0 or position.y > screen_rect.size.y
