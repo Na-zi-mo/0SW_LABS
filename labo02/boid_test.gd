@@ -8,7 +8,7 @@ var max_neighbor : int = 7
 var top_speed : float = 150.0   # Vitesse maximale du boid
 var top_steer : float = 2       # Force de rotation maximale (limite de la direction)
 var mass : float = 1.0          # Masse du boid
-var r : float = 2.0            # Rayon du boid (utilisé pour le calcul des distances)
+var r : float = 4.0            # Rayon du boid (utilisé pour le calcul des distances)
 
 # Distances d'influence pour les comportements
 var radius_separation : float = 5 * r   # Rayon d'évitement pour la séparation
@@ -37,7 +37,7 @@ var is_chosen : bool = false
 
 # Fonction appelée au démarrage du boid
 func _ready():
-	add_to_group("ennemies")
+	#add_to_group("ennemies")
 	randomize()
 	# Initialiser la vitesse aléatoire du boid
 	velocity = Vector2(randf_range(-top_speed, top_speed), randf_range(-top_speed, top_speed))

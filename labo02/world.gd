@@ -33,6 +33,7 @@ func remove_boids(count: int):
 		random_boid.queue_free()
 
 func _process(delta: float) -> void:
+	#print(get_children().filter(func(n): return n is Boid).size())
 	if num_boids != get_children().filter(func(n): return n is Boid).size():
 		adjust_boids()
 		

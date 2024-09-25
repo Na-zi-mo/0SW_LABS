@@ -19,3 +19,5 @@ texture = ExtResource("1_oc668")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_msva6")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Bullet_body_entered"]
