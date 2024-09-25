@@ -2,7 +2,7 @@ extends Node2D
 
 class_name Boid
 
-var max_neighbor : int = 7
+var max_neighbor : int = 19
 
 # Paramètres de base du boid
 var top_speed : float = 150.0   # Vitesse maximale du boid
@@ -175,6 +175,9 @@ func get_boid_siblings() -> Array:
 		if sibling is Boid:  # Vérifier que l'enfant est bien un boid
 			boids.append(sibling)
 	return boids	
+
+func change_color():
+	sprite.modulate = Color(randf(),randf(),randf())
 
 func set_debug(val) -> void:
 	debug = val

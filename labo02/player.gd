@@ -4,6 +4,7 @@ extends Node2D
 @export var acceleration = Vector2()
 @export var rotation_speed = 5.0
 @export var move_speed = 200.0 
+@export var distance_from_boids = 200
 var mass : float = 1.0    
 const top_speed = 200
 
@@ -11,12 +12,14 @@ const top_speed = 200
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	spawn()
 
 func spawn() :
-	position = Vector2(randf_range(50, get_viewport_rect().size.x -50), randf_range(50, get_viewport_rect().size.y-50))
-	#position = Vector2(150,150)
+	var potential_spawn = Vector2(randf_range(50, get_viewport_rect().size.x -50), randf_range(50, get_viewport_rect().size.y-50))
+
+	while !is_area_safe_to_spawn(potential_spawn):
+		potential_spawn = Vector2(randf_range(50, get_viewport_rect().size.x -50), randf_range(50, get_viewport_rect().size.y-50))
+	position = potential_spawn
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float):
@@ -69,6 +72,19 @@ func shoot():
 	get_parent().add_child(b)
 	b.global_transform = $Muzzle.global_transform
 
+func is_area_safe_to_spawn(potenital_spawn : Vector2):
+	var close_boids_num = get_surrounding_nodes(potenital_spawn)
+	return close_boids_num == 0
+
+func get_surrounding_nodes(potenital_spawn : Vector2):
+	var nodes = get_tree().get_nodes_in_group("ennemies")
+	var close_nodes = []
+	
+	for node in nodes:
+		var distance = potenital_spawn.distance_to(node.position)
+		if distance < distance_from_boids :
+			close_nodes.append(node)
+	return close_nodes.size()
 
 func _on_Player_body_entered(body: Node2D) -> void:
 	if body.is_in_group("ennemies"):
