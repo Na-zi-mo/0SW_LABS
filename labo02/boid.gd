@@ -29,7 +29,7 @@ var has_cohesion : bool = true
 var has_separation : bool = true
 var has_alignment : bool = true
 
-@export var distance_from_player = 750
+@export var distance_from_player = 500
 # Référence à l'élément Sprite (image) du boid
 @onready var sprite = $Image
 
