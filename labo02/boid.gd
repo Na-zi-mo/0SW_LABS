@@ -29,6 +29,7 @@ var has_cohesion : bool = true
 var has_separation : bool = true
 var has_alignment : bool = true
 
+@export var distance_from_player = 750
 # Référence à l'élément Sprite (image) du boid
 @onready var sprite = $Image
 
@@ -37,15 +38,29 @@ var is_chosen : bool = false
 
 # Fonction appelée au démarrage du boid
 func _ready():
-	#add_to_group("ennemies")
+
 	randomize()
 	# Initialiser la vitesse aléatoire du boid
 	velocity = Vector2(randf_range(-top_speed, top_speed), randf_range(-top_speed, top_speed))
 	velocity.limit_length(top_speed)  # Limiter la vitesse à top_speed
 	
+	spawn()
 	# Initialiser la position du boid de manière aléatoire sur l'écran
 	location.x = randi_range(0, get_viewport_rect().size.x as int)
 	location.y = randi_range(0, get_viewport_rect().size.y as int)
+	
+func spawn() :
+	var potential_spawn = Vector2(randf_range(0, get_viewport_rect().size.x), randf_range(0, get_viewport_rect().size.y))
+
+	while !is_area_safe_to_spawn(potential_spawn):
+		potential_spawn = Vector2(randf_range(50, get_viewport_rect().size.x -50), randf_range(50, get_viewport_rect().size.y-50))
+	position = potential_spawn
+	
+func is_area_safe_to_spawn(potenital_spawn : Vector2):	
+	var player = get_tree().get_first_node_in_group("player")
+	
+	var distance = potenital_spawn.distance_to(player.position)
+	return distance > distance_from_player 
 
 # Fonction appelée à chaque frame
 func _physics_process(delta: float):
