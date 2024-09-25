@@ -8,7 +8,7 @@ var max_neighbor : int = 7
 var top_speed : float = 150.0   # Vitesse maximale du boid
 var top_steer : float = 2       # Force de rotation maximale (limite de la direction)
 var mass : float = 1.0          # Masse du boid
-var r : float = 10.0            # Rayon du boid (utilisé pour le calcul des distances)
+var r : float = 2.0            # Rayon du boid (utilisé pour le calcul des distances)
 
 # Distances d'influence pour les comportements
 var radius_separation : float = 5 * r   # Rayon d'évitement pour la séparation
@@ -55,14 +55,17 @@ func _physics_process(delta: float):
 	# Appliquer les forces calculées
 	if has_separation :
 		var separation_force = separation(boids) * weight_separation
+		#print("boids :  {0}".format([boids]))
 		apply_force(separation_force)
 		
 	if has_alignment :
 		var alignment_force = alignment(boids) * weight_alignment
+		#print("alignment :  {0}".format([alignment_force]))
 		apply_force(alignment_force)
 		
 	if has_cohesion :
 		var cohesion_force = cohesion(boids) * weight_cohesion
+		#print("cohesion :  {0}".format([cohesion_force]))
 		apply_force(cohesion_force)	
 
 	# Mettre à jour la position du boid et gérer la limite de l'écran
@@ -168,7 +171,7 @@ func seek(target: Vector2) -> Vector2:
 func get_boid_siblings() -> Array:
 	var boids = []
 	for sibling in get_parent().get_children():
-		if sibling is Boid:  # Vérifier que l'enfant est bien un boid
+		if sibling is BoidTest:  # Vérifier que l'enfant est bien un boid
 			boids.append(sibling)
 	return boids	
 

@@ -30,7 +30,7 @@ func _ready():
 	adjust_boids()  # Ajuste le nombre de boids initialement
 	set_debug()
 	update_forces()
-	num_boids = max_boids
+	#num_boids = max_boids
 
 # Ajuste dynamiquement le nombre de boids pour correspondre à "num_boids"
 func adjust_boids():
@@ -75,7 +75,7 @@ func set_debug():
 # Cette fonction peut être appelée à tout moment pour ajuster le nombre de boids
 func _physics_process(delta):
 	manage_inputs()
-	print(get_children().filter(func(n): return n is BoidTest).size())
+	#print(get_children().filter(func(n): return n is BoidTest).size())
 	# Appel d'ajustement pour synchroniser le nombre de boids si le champ change
 	#if num_boids != get_children().filter(func(n): return n is BoidTest).size():
 		#adjust_boids()
@@ -83,8 +83,9 @@ func _physics_process(delta):
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if num_boids > get_children().filter(func(n): return n is BoidTest).size():
+			if max_boids > get_children().filter(func(n): return n is BoidTest).size():
 				add_boids(1)
+				num_boids+=1
 
 func manage_inputs() -> void :
 	if (Input.is_action_just_pressed("quit")):
