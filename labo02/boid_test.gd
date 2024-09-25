@@ -37,6 +37,7 @@ var is_chosen : bool = false
 
 # Fonction appelée au démarrage du boid
 func _ready():
+	add_to_group("ennemies")
 	randomize()
 	# Initialiser la vitesse aléatoire du boid
 	velocity = Vector2(randf_range(-top_speed, top_speed), randf_range(-top_speed, top_speed))

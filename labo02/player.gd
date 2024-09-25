@@ -68,3 +68,8 @@ func shoot():
 	var b = bullet_scene.instantiate()
 	get_parent().add_child(b)
 	b.global_transform = $Muzzle.global_transform
+
+
+func _on_Player_body_entered(body: Node2D) -> void:
+	if body.is_in_group("ennemies"):
+		spawn()

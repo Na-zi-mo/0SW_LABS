@@ -7,8 +7,10 @@
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_wdss7")
+debugging = true
 enable_separation = true
 enable_alignment = true
+enable_cohesion = true
 
 [node name="Player" parent="." instance=ExtResource("1_c0jwr")]
 bullet_scene = ExtResource("2_m56x2")
