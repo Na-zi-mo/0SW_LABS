@@ -46,7 +46,7 @@ func get_input(delta):
 	
 	if Input.is_action_pressed("forward"):		
 		var direction = Vector2(cos(rotation), sin(rotation))
-		var force = direction * 2
+		var force = direction * 5
 		$Fire.visible = true
 		apply_force(force)
 

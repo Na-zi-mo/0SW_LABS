@@ -11,7 +11,6 @@ func _physics_process(delta):
 		position += transform.x * speed * delta
 		if  is_out_of_screen():
 			bullet_out_of_screen.emit(self)
-			emit_signal("bullet_out_of_screen")
 
 func _on_Bullet_body_entered(body: Node2D):
 	# Vérifier la collision avec les ennemis (ou autres objets)
