@@ -4,7 +4,6 @@ extends Node
 class_name  BulletPool
 
 @onready var bullet_scene = preload("res://bullet.tscn")
-#var bullet : BulletWithPool 
 
 @export var pool_size : int = 10  # Taille du pool
 
@@ -16,9 +15,7 @@ func _ready():
 	# Créer le pool de projectiles
 	for i in range(pool_size):
 		var bullet = bullet_scene.instantiate()
-		#bullet.bullet_out_of_screen.connect(_on_bullet_out_of_screen)
 		bullet.connect("bullet_out_of_screen", _on_bullet_out_of_screen)
-		#print(bullet.get_signal_connection_list("bullet_out_of_screen"))
 		add_child(bullet)
 		bullet.visible = false  # Masquer le projectile au début
 		bullet_pool.append(bullet)

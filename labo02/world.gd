@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var max_boids : int = 20
-@export_range(3, 500, 2) var num_boids : int = randi_range(10,20)  # Nombre cible de boids
+@export_range(3, 500, 2) var num_boids : int = randi_range(10,20)
 
 var inital_boids : bool = true
 
@@ -72,9 +72,8 @@ func set_debug():
 			current_boids[0].is_chosen = debugging
 	
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	manage_inputs()
-	#print(get_children().filter(func(n): return n is Boid).size())
 
 func _input(event):
 	if event is InputEventMouseButton:
