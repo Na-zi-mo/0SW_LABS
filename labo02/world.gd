@@ -3,6 +3,8 @@ extends Node2D
 @export var max_boids : int = 20
 @export_range(3, 500, 2) var num_boids : int = randi_range(10,20)  # Nombre cible de boids
 
+var inital_boids : bool = true
+
 @export var debugging : bool = false :
 	set(value) :
 		debugging = value
@@ -30,6 +32,7 @@ func _ready():
 	adjust_boids()  
 	set_debug()
 	update_forces()
+	inital_boids = false
 
 func adjust_boids():
 	var current_boids = get_children().filter(func(n): return n is Boid)
@@ -45,7 +48,7 @@ func add_boids(count: int):
 		var boid_instance = boid_scene.instantiate()
 		boid_instance.position = Vector2(randi_range(0, get_viewport_rect().size.x), randi_range(0, get_viewport_rect().size.y))
 		add_child(boid_instance)
-		if count == 1:
+		if !inital_boids:
 			boid_instance.change_color()
 		
 

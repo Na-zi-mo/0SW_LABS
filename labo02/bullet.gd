@@ -36,8 +36,8 @@ func _physics_process(delta):
 	# Déplacement du projectile
 	if visible:
 		position += transform.x * speed * delta
-		var result = is_out_of_screen()
-		if result:
+		#var result =
+		if  is_out_of_screen():
 			#print("true")
 			#emit_signal("bullet_out_of_screen")
 			bullet_out_of_screen.emit(self)
@@ -59,15 +59,15 @@ func _physics_process(delta):
 
 func _on_Bullet_body_entered(body: Node2D):
 	# Vérifier la collision avec les ennemis (ou autres objets)
+	if visible:
 	#print(body.get_groups())
-	if body.is_in_group("ennemies"):
-		body.queue_free()  # Supprimer l'ennemi touché
-	#emit_signal("bullet_out_of_screen")  # Émettre le signal pour recycler le projectile
-	bullet_out_of_screen.emit(self)
+		if body.is_in_group("ennemies"):
+			body.queue_free()  # Supprimer l'ennemi touché
+		#emit_signal("bullet_out_of_screen")  # Émettre le signal pour recycler le projectile
+		bullet_out_of_screen.emit(self)
 	#emit_signal("bullet_out_of_screen")
 
 func is_out_of_screen() -> bool:
 	#print("Out of screen")
 	var screen_rect = get_viewport_rect()
-	var result : bool = position.x < 0 or position.x > screen_rect.size.x or position.y < 0 or position.y > screen_rect.size.y
-	return result
+	return position.x < 0 or position.x > screen_rect.size.x or position.y < 0 or position.y > screen_rect.size.y
