@@ -74,6 +74,7 @@ func set_debug():
 
 func _physics_process(_delta):
 	manage_inputs()
+	$Background.scale = get_viewport_rect().size / $Background.texture.get_size()
 
 func _input(event):
 	if event is InputEventMouseButton:
