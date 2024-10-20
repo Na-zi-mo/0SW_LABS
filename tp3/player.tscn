@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://sjqhcj5s37fx"]
+[gd_scene load_steps=15 format=3 uid="uid://sjqhcj5s37fx"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_8hyh0"]
+[ext_resource type="Script" path="res://player_optimized.gd" id="1_23ceh"]
 [ext_resource type="Texture2D" uid="uid://cwg01dxv610t8" path="res://spritesheets/adventurer-Sheet.png" id="2_qbor4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dxclw"]
@@ -110,7 +110,6 @@ tracks/3/keys = {
 [sub_resource type="Animation" id="Animation_i3pvr"]
 resource_name = "fall"
 length = 0.3
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -327,9 +326,26 @@ _data = {
 "walk": SubResource("Animation_hpmpi")
 }
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_msdc8"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pb8u6"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0b3sf"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_a2up5"]
+states/idle/node = SubResource("AnimationNodeAnimation_msdc8")
+states/idle/position = Vector2(383, 100)
+states/walk/node = SubResource("AnimationNodeAnimation_pb8u6")
+states/walk/position = Vector2(568, 100)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_0b3sf")]
+graph_offset = Vector2(-59, -10)
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(121, 335)
-script = ExtResource("1_8hyh0")
+script = ExtResource("1_23ceh")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -350,3 +366,9 @@ libraries = {
 [node name="Camera2D" type="Camera2D" parent="."]
 limit_top = 0
 limit_bottom = 400
+position_smoothing_enabled = true
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+tree_root = SubResource("AnimationNodeStateMachine_a2up5")
+anim_player = NodePath("../AnimationPlayer")
