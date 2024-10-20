@@ -1,3 +1,70 @@
-[gd_scene format=3 uid="uid://byl786d032n78"]
+[gd_scene load_steps=8 format=3 uid="uid://byl786d032n78"]
+
+[ext_resource type="PackedScene" uid="uid://vmhp12kclfor" path="res://parallax_background.tscn" id="1_wee38"]
+[ext_resource type="Texture2D" uid="uid://doekuv0hb537g" path="res://2d_animation_player-run.webp" id="3_0df7q"]
+[ext_resource type="Script" path="res://player.gd" id="3_ti72c"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6on4c"]
+height = 34.0
+
+[sub_resource type="Animation" id="Animation_6e111"]
+resource_name = "walk"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_i1igw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s87sy"]
+_data = {
+"RESET": SubResource("Animation_i1igw"),
+"walk": SubResource("Animation_6e111")
+}
 
 [node name="World" type="Node2D"]
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("1_wee38")]
+
+[node name="player" type="CharacterBody2D" parent="."]
+position = Vector2(131, 232)
+script = ExtResource("3_ti72c")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
+shape = SubResource("CapsuleShape2D_6on4c")
+
+[node name="Sprite2D" type="Sprite2D" parent="player"]
+texture = ExtResource("3_0df7q")
+hframes = 6
+
+[node name="Camera2D" type="Camera2D" parent="player"]
+limit_bottom = 400
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="player"]
+libraries = {
+"": SubResource("AnimationLibrary_s87sy")
+}
