@@ -20,9 +20,9 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 		is_jumping = true
 
-	# Handle attack.
+	# Handle attack
 	if Input.is_action_just_pressed("attack") and is_on_floor():
-		print("attack")
+		#print("attack")
 		attacking = true
 		_animation_player.play("attack")
 
