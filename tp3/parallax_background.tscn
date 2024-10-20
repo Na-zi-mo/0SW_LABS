@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://vmhp12kclfor"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="sky" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="sky"]
+
+[node name="cliff" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="cliff"]
+
+[node name="tree" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="tree"]
+
+[node name="front" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="front"]
