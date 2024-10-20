@@ -21,6 +21,8 @@ var attacking : bool = false
 
 var motion = Vector2()
 
+var dir
+
 @onready var current_sprite : Sprite2D = $Sprite2D
 @onready var anim_player : AnimationPlayer = $AnimationPlayer
 
@@ -28,8 +30,60 @@ var motion = Vector2()
 func _ready() -> void:
 	pass # Replace with function body.
 
+func fall():
+	if is_on_floor():
+		current_state = State.STATE_IDLE
+		anim_player.play("idle")
+func idle():
+	if dir != 0:
+		current_state = State.STATE_WALKING
+		anim_player.play("walk")
+		motion.x = ACCEL * dir  
+	elif Input.is_action_just_pressed("ui_accept"):
+		current_state = State.STATE_JUMPING
+		motion.y = -JUMPFORCE
+		anim_player.play("jump")
+	elif not is_on_floor() and motion.y > 0:
+		current_state = State.STATE_FALLING
+		anim_player.play("fall")
+	elif Input.is_action_just_pressed("attack"):
+		current_state = State.STATE_ATTACKING
+		anim_player.play("attack")
+func jump():
+	if motion.y >= 0:
+		current_state = State.STATE_FALLING
+		anim_player.play("fall")
+	else:
+		anim_player.play("jump")
+func walk():
+	motion.x = ACCEL * dir
+	if dir > 0:
+		facing_right = true
+	elif dir < 0:
+		facing_right = false
+	else:
+		current_state = State.STATE_IDLE
+		motion = motion.lerp(Vector2.ZERO, 0.2)
+		anim_player.play("idle")
+		
+	if not is_on_floor() and motion.y > 0:
+		current_state = State.STATE_FALLING
+		anim_player.play("fall")
+	elif is_on_floor() and Input.is_action_just_pressed("ui_accept"):
+		current_state = State.STATE_JUMPING
+		motion.y = -JUMPFORCE
+		anim_player.play("jump")
+	elif is_on_floor() and Input.is_action_just_pressed("attack"):
+		current_state = State.STATE_ATTACKING
+		anim_player.play("attack")
+func attack():
+	if !anim_player.is_playing():
+		current_state = State.STATE_IDLE
+		anim_player.play("idle")
+
+
 func _physics_process(delta: float) -> void:
-	var dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left");
+	dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left");
 	motion.y += GRAVITY
 	
 	if motion.y > MAXFALLSPEED:
@@ -42,56 +96,15 @@ func _physics_process(delta: float) -> void:
 	
 	match current_state:
 		State.STATE_FALLING:
-			if is_on_floor():
-				current_state = State.STATE_IDLE
-				anim_player.play("idle")
+			fall()
 		State.STATE_IDLE:
-			if dir != 0:
-				current_state = State.STATE_WALKING
-				anim_player.play("walk")
-				motion.x = ACCEL * dir  
-				#motion.x = lerp(motion.x, dir * MAXSPEED, ACCEL * delta)
-			elif Input.is_action_just_pressed("ui_accept"):
-				current_state = State.STATE_JUMPING
-				motion.y = -JUMPFORCE
-				anim_player.play("jump")
-			elif not is_on_floor() and motion.y > 0:
-				current_state = State.STATE_FALLING
-				anim_player.play("fall")
-			elif Input.is_action_just_pressed("attack"):
-				current_state = State.STATE_ATTACKING
-				anim_player.play("attack")
+			idle()
 		State.STATE_JUMPING:
-			if motion.y >= 0:
-				current_state = State.STATE_FALLING
-				anim_player.play("fall")
-			else:
-				anim_player.play("jump")
+			jump()
 		State.STATE_WALKING:
-			motion.x = ACCEL * dir
-			if dir > 0:
-				facing_right = true
-			elif dir < 0:
-				facing_right = false
-			else:
-				current_state = State.STATE_IDLE
-				motion = motion.lerp(Vector2.ZERO, 0.2)
-				anim_player.play("idle")
-				
-			if not is_on_floor() and motion.y > 0:
-				current_state = State.STATE_FALLING
-				anim_player.play("fall")
-			elif is_on_floor() and Input.is_action_just_pressed("ui_accept"):
-				current_state = State.STATE_JUMPING
-				motion.y = -JUMPFORCE
-				anim_player.play("jump")
-			elif is_on_floor() and Input.is_action_just_pressed("attack"):
-				current_state = State.STATE_ATTACKING
-				anim_player.play("attack")
+			walk()
 		State.STATE_ATTACKING:
-			if !anim_player.is_playing():
-				current_state = State.STATE_IDLE
-				anim_player.play("idle")
+			attack()
 		_:
 			anim_player.play("idle")
 			
