@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://byl786d032n78"]
+[gd_scene load_steps=9 format=3 uid="uid://byl786d032n78"]
 
+[ext_resource type="PackedScene" uid="uid://ddf2lmweuwi16" path="res://tile_map_layer.tscn" id="1_e65tn"]
 [ext_resource type="PackedScene" uid="uid://vmhp12kclfor" path="res://parallax_background.tscn" id="1_wee38"]
-[ext_resource type="Texture2D" uid="uid://doekuv0hb537g" path="res://2d_animation_player-run.webp" id="3_0df7q"]
+[ext_resource type="Texture2D" uid="uid://b0qrjyfo0dy2j" path="res://spritesheets/2d_animation_player-run.webp" id="2_pswqc"]
 [ext_resource type="Script" path="res://player.gd" id="3_ti72c"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6on4c"]
-height = 34.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_ws05b"]
+radius = 12.0416
 
 [sub_resource type="Animation" id="Animation_6e111"]
 resource_name = "walk"
@@ -47,24 +48,26 @@ _data = {
 
 [node name="World" type="Node2D"]
 
-[node name="ParallaxBackground" parent="." instance=ExtResource("1_wee38")]
-
 [node name="player" type="CharacterBody2D" parent="."]
-position = Vector2(131, 232)
+position = Vector2(111, 321)
 script = ExtResource("3_ti72c")
-metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
-shape = SubResource("CapsuleShape2D_6on4c")
+position = Vector2(-2, 4)
+shape = SubResource("CircleShape2D_ws05b")
 
 [node name="Sprite2D" type="Sprite2D" parent="player"]
-texture = ExtResource("3_0df7q")
+texture = ExtResource("2_pswqc")
 hframes = 6
-
-[node name="Camera2D" type="Camera2D" parent="player"]
-limit_bottom = 400
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="player"]
 libraries = {
 "": SubResource("AnimationLibrary_s87sy")
 }
+
+[node name="Camera2D" type="Camera2D" parent="player"]
+limit_bottom = 400
+
+[node name="TileMapLayer" parent="." instance=ExtResource("1_e65tn")]
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("1_wee38")]
