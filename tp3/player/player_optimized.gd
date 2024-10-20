@@ -30,6 +30,12 @@ var dir
 func _ready() -> void:
 	pass # Replace with function body.
 
+func fall_check():
+	pass
+
+func jump_check():
+	pass
+
 func fall():
 	if is_on_floor():
 		current_state = State.STATE_IDLE
@@ -109,8 +115,8 @@ func _physics_process(delta: float) -> void:
 			anim_player.play("idle")
 			
 	if current_state == State.STATE_IDLE:
-		motion.x = lerp(float(motion.x), 0.0, 0.1)  # Gradually stop the player
+		motion.x = lerp(float(motion.x), 0.0, 0.1)  
 	else:
-		motion.x = lerp(motion.x, float(dir * MAXSPEED), (ACCEL * delta) / MAXSPEED)  # Use input to control speed
+		motion.x = lerp(motion.x, float(dir * MAXSPEED), (ACCEL * delta) / MAXSPEED) 
 	velocity = motion
 	move_and_slide()
