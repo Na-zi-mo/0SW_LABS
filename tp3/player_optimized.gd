@@ -1,14 +1,18 @@
 extends CharacterBody2D
 
-#class_name 
+class_name Player
+
+enum State { STATE_JUMPING, STATE_IDLE, STATE_WALKING, STATE_FALLING, STATE_ATTACKING }
+
+var current_state : State = State.STATE_IDLE
 
 var UP = Vector2(0,-1)
-const GRAVITY = 20
+const GRAVITY = 10
 const MAXFALLSPEED = 200
-const MAXSPEED = 100
-const JUMPFORCE = 300
+const MAXSPEED = 200
+const JUMPFORCE = 350
 
-const ACCEL = 10.0
+const ACCEL = 75.0
 
 var vZero = Vector2()
 
@@ -24,11 +28,8 @@ var motion = Vector2()
 func _ready() -> void:
 	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	# Ou l'équivalent dans votre code
-	
+	var dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left");
 	motion.y += GRAVITY
 	
 	if motion.y > MAXFALLSPEED:
@@ -36,38 +37,67 @@ func _physics_process(delta: float) -> void:
 	
 	current_sprite.flip_h = !facing_right
 	
-	var dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left");
+	if motion.y > MAXFALLSPEED:
+		motion.y = MAXFALLSPEED
 	
-	if not attacking:
-		if dir != 0 and not attacking:
-			motion.x = lerp(motion.x, dir * MAXSPEED, ACCEL * delta)  # Accelerate based on input
-			#motion.x += ACCEL * dir
-			anim_player.play("walk")
+	match current_state:
+		State.STATE_FALLING:
+			if is_on_floor():
+				current_state = State.STATE_IDLE
+				anim_player.play("idle")
+		State.STATE_IDLE:
+			if dir != 0:
+				current_state = State.STATE_WALKING
+				anim_player.play("walk")
+				motion.x = ACCEL * dir  
+				#motion.x = lerp(motion.x, dir * MAXSPEED, ACCEL * delta)
+			elif Input.is_action_just_pressed("ui_accept"):
+				current_state = State.STATE_JUMPING
+				motion.y = -JUMPFORCE
+				anim_player.play("jump")
+			elif not is_on_floor() and motion.y > 0:
+				current_state = State.STATE_FALLING
+				anim_player.play("fall")
+			elif Input.is_action_just_pressed("attack"):
+				current_state = State.STATE_ATTACKING
+				anim_player.play("attack")
+		State.STATE_JUMPING:
+			if motion.y >= 0:
+				current_state = State.STATE_FALLING
+				anim_player.play("fall")
+			else:
+				anim_player.play("jump")
+		State.STATE_WALKING:
+			motion.x = ACCEL * dir
 			if dir > 0:
 				facing_right = true
 			elif dir < 0:
 				facing_right = false
-		else:
-			motion = motion.lerp(Vector2.ZERO, 0.2)
+			else:
+				current_state = State.STATE_IDLE
+				motion = motion.lerp(Vector2.ZERO, 0.2)
+				anim_player.play("idle")
+				
+			if not is_on_floor() and motion.y > 0:
+				current_state = State.STATE_FALLING
+				anim_player.play("fall")
+			elif is_on_floor() and Input.is_action_just_pressed("ui_accept"):
+				current_state = State.STATE_JUMPING
+				motion.y = -JUMPFORCE
+				anim_player.play("jump")
+			elif is_on_floor() and Input.is_action_just_pressed("attack"):
+				current_state = State.STATE_ATTACKING
+				anim_player.play("attack")
+		State.STATE_ATTACKING:
+			if !anim_player.is_playing():
+				current_state = State.STATE_IDLE
+				anim_player.play("idle")
+		_:
 			anim_player.play("idle")
-	
-	if is_on_floor() and Input.is_action_just_pressed('ui_accept'):
-		motion.y = -JUMPFORCE
-		
-	if is_on_floor() and Input.is_action_just_pressed('attack'):
-		attacking = true
-		anim_player.play("attack")
-		
-	if attacking and anim_player.current_animation != "attack":
-		attacking = false
-	
-	if !is_on_floor():
-		if motion.y < 0:
-			anim_player.play("jump")
-		elif motion.y > 0:
-			anim_player.play("fall")
-	
-	#motion.x = lerp(motion.x, float(MAXSPEED * (1 if motion.x > 0 else -1)), ACCEL / MAXSPEED)
-
+			
+	if current_state == State.STATE_IDLE:
+		motion.x = lerp(float(motion.x), 0.0, 0.1)  # Gradually stop the player
+	else:
+		motion.x = lerp(motion.x, float(dir * MAXSPEED), (ACCEL * delta) / MAXSPEED)  # Use input to control speed
 	velocity = motion
 	move_and_slide()
