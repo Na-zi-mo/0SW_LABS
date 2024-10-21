@@ -4,14 +4,12 @@ class_name PlayerWalk
 @export var player : Player
 var anim_player : AnimationPlayer
 
-const ACCEL = 75.0
+@export var ACCEL = 75.0
 
 func manage_input() -> int:	
 	var dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left");
 
-	if player.is_on_floor() and Input.is_action_just_pressed("ui_accept"):
-		Transitioned.emit(self, "jump")
-
+	
 	return dir
 
 func update(delta : float) -> void:
@@ -30,10 +28,14 @@ func update(delta : float) -> void:
 		
 	if not player.is_on_floor() and player.velocity.y > 0 :
 		Transitioned.emit(self, "fall")
+		
+	if player.is_on_floor() and Input.is_action_just_pressed("ui_accept"):
+		Transitioned.emit(self, "jump")
+	elif player.is_on_floor() and Input.is_action_just_pressed("attack"):
+		Transitioned.emit(self, "attack")
 
 func physics_update(delta: float) -> void:
 	var dir := manage_input()
 	
 	if (player.velocity.length() > 0) :
 		anim_player.play("walk")
-		

@@ -2,10 +2,10 @@ extends CharacterBody2D
 
 class_name Player
 
-const GRAVITY = 10
-const MAXFALLSPEED = 200
-const MAXSPEED = 200
-const JUMPFORCE = 350
+@export var GRAVITY = 10
+@export var MAXFALLSPEED = 200
+@export var MAXSPEED = 200
+@export var JUMPFORCE = 350
 
 const ACCEL = 75.0
 

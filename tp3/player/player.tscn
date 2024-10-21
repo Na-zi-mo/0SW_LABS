@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://sjqhcj5s37fx"]
+[gd_scene load_steps=21 format=3 uid="uid://sjqhcj5s37fx"]
 
 [ext_resource type="Script" path="res://player/player_fsm.gd" id="1_rpvud"]
 [ext_resource type="Texture2D" uid="uid://cwg01dxv610t8" path="res://spritesheets/adventurer-Sheet.png" id="2_qbor4"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://player/walk_state.gd" id="5_fcpt8"]
 [ext_resource type="Script" path="res://player/jump_state.gd" id="6_5gesa"]
 [ext_resource type="Script" path="res://player/fall_state.gd" id="7_gg2mk"]
+[ext_resource type="Script" path="res://player/attack_state.gd" id="8_imsyg"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dxclw"]
 
@@ -397,4 +398,8 @@ player = NodePath("../..")
 
 [node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("7_gg2mk")
+player = NodePath("../..")
+
+[node name="Attack" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
+script = ExtResource("8_imsyg")
 player = NodePath("../..")
