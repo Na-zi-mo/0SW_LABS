@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-class_name Player
+#class_name Player
 
 enum State { STATE_JUMPING, STATE_IDLE, STATE_WALKING, STATE_FALLING, STATE_ATTACKING }
 
