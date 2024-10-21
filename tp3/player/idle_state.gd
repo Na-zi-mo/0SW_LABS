@@ -18,6 +18,10 @@ func enter():
 	
 func update(delta: float) -> void:
 	player.motion = player.motion.lerp(Vector2.ZERO, 0.2)
+	
+	if not player.is_on_floor() and player.velocity.y > 0 :
+		Transitioned.emit(self, "fall")
+	
 	if not anim_player :
 		anim_player = player.get_animation_player()
 	manage_input()

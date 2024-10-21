@@ -27,6 +27,9 @@ func update(delta : float) -> void:
 		player.facing_right = false
 	else:
 		Transitioned.emit(self, "idle")
+		
+	if not player.is_on_floor() and player.velocity.y > 0 :
+		Transitioned.emit(self, "fall")
 
 func physics_update(delta: float) -> void:
 	var dir := manage_input()
