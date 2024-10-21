@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://sjqhcj5s37fx"]
+[gd_scene load_steps=32 format=3 uid="uid://sjqhcj5s37fx"]
 
 [ext_resource type="Script" path="res://player/player_fsm.gd" id="1_rpvud"]
 [ext_resource type="Texture2D" uid="uid://cwg01dxv610t8" path="res://spritesheets/adventurer-Sheet.png" id="2_qbor4"]
@@ -116,7 +116,6 @@ tracks/3/keys = {
 [sub_resource type="Animation" id="Animation_i3pvr"]
 resource_name = "fall"
 length = 0.3
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -221,7 +220,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_17t6a"]
 resource_name = "jump"
-length = 0.45
+length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -265,7 +264,7 @@ tracks/3/path = NodePath("Sprite2D:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.133333, 0.166667, 0.233333, 0.3),
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333, 0.166667, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [14, 15, 16, 17, 18, 19, 21]
@@ -333,8 +332,17 @@ _data = {
 "walk": SubResource("Animation_hpmpi")
 }
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qwiw5"]
+animation = &"attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x8b8t"]
+animation = &"fall"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_msdc8"]
 animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_te4p8"]
+animation = &"jump"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pb8u6"]
 animation = &"walk"
@@ -342,13 +350,38 @@ animation = &"walk"
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0b3sf"]
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_isv64"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gx74q"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ub4bm"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dxd3g"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vjyje"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hg32k"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j5e6p"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ps6vo"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_a2up5"]
+states/Start/position = Vector2(206, 100)
+states/attack/node = SubResource("AnimationNodeAnimation_qwiw5")
+states/attack/position = Vector2(408, 203)
+states/fall/node = SubResource("AnimationNodeAnimation_x8b8t")
+states/fall/position = Vector2(608, -22)
 states/idle/node = SubResource("AnimationNodeAnimation_msdc8")
-states/idle/position = Vector2(383, 100)
+states/idle/position = Vector2(401, 100)
+states/jump/node = SubResource("AnimationNodeAnimation_te4p8")
+states/jump/position = Vector2(401, -12)
 states/walk/node = SubResource("AnimationNodeAnimation_pb8u6")
-states/walk/position = Vector2(568, 100)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_0b3sf")]
-graph_offset = Vector2(-59, -10)
+states/walk/position = Vector2(683, 252)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_0b3sf"), "idle", "walk", SubResource("AnimationNodeStateMachineTransition_isv64"), "walk", "idle", SubResource("AnimationNodeStateMachineTransition_gx74q"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_ub4bm"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_dxd3g"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_vjyje"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_hg32k"), "fall", "idle", SubResource("AnimationNodeStateMachineTransition_j5e6p"), "walk", "jump", SubResource("AnimationNodeStateMachineTransition_ps6vo")]
+graph_offset = Vector2(-163, -82)
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(121, 335)
@@ -376,7 +409,6 @@ limit_bottom = 400
 position_smoothing_enabled = true
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-active = false
 tree_root = SubResource("AnimationNodeStateMachine_a2up5")
 anim_player = NodePath("../AnimationPlayer")
 

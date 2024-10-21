@@ -2,23 +2,18 @@ extends BaseState
 class_name PlayerFall
 
 @export var player : Player
-var anim_player : AnimationPlayer
-
+var state_machine : AnimationNodeStateMachinePlayback 
 	
 func enter():
-	anim_player = player.get_animation_player()
+	state_machine = player.get_state_machine()
 	
-
 func update(delta : float) -> void:
-	if not anim_player :
-		anim_player = player.get_animation_player()
+	if not state_machine:
+		state_machine = player.get_state_machine()
 	
 	if player.is_on_floor() :
 		Transitioned.emit(self, "idle")
 	
-	
-
 func physics_update(delta: float) -> void:
 	if not player.is_on_floor() :
-		anim_player.play("fall")
-		
+		state_machine.travel("fall")
