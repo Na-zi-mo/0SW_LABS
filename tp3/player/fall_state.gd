@@ -1,5 +1,5 @@
 extends BaseState
-class_name PlayerJump
+class_name PlayerFall
 
 @export var player : Player
 var anim_player : AnimationPlayer
@@ -11,7 +11,7 @@ const MAXSPEED = 200
 	
 func enter():
 	anim_player = player.get_animation_player()
-	player.motion.y = -JUMPFORCE
+	#player.motion.y = -JUMPFORCE
 	
 
 func update(delta : float) -> void:
@@ -19,12 +19,12 @@ func update(delta : float) -> void:
 	if not anim_player :
 		anim_player = player.get_animation_player()
 	
-	if player.velocity.y > 0 :
-		Transitioned.emit(self, "fall")
+	if player.is_on_floor() :
+		Transitioned.emit(self, "idle")
 	
 	
 
 func physics_update(delta: float) -> void:
-	if (player.velocity.y < 0) :
-		anim_player.play("jump")
+	if not player.is_on_floor() :
+		anim_player.play("fall")
 		

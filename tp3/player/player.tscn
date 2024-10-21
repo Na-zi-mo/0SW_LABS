@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://sjqhcj5s37fx"]
+[gd_scene load_steps=20 format=3 uid="uid://sjqhcj5s37fx"]
 
 [ext_resource type="Script" path="res://player/player_fsm.gd" id="1_rpvud"]
 [ext_resource type="Texture2D" uid="uid://cwg01dxv610t8" path="res://spritesheets/adventurer-Sheet.png" id="2_qbor4"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://player/idle_state.gd" id="4_pxwst"]
 [ext_resource type="Script" path="res://player/walk_state.gd" id="5_fcpt8"]
 [ext_resource type="Script" path="res://player/jump_state.gd" id="6_5gesa"]
+[ext_resource type="Script" path="res://player/fall_state.gd" id="7_gg2mk"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dxclw"]
 
@@ -114,6 +115,7 @@ tracks/3/keys = {
 [sub_resource type="Animation" id="Animation_i3pvr"]
 resource_name = "fall"
 length = 0.3
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -218,7 +220,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_17t6a"]
 resource_name = "jump"
-length = 0.6
+length = 0.45
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -262,7 +264,7 @@ tracks/3/path = NodePath("Sprite2D:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.166667, 0.266667, 0.333333, 0.433333, 0.5),
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.133333, 0.166667, 0.233333, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [14, 15, 16, 17, 18, 19, 21]
@@ -391,4 +393,8 @@ player = NodePath("../..")
 
 [node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("6_5gesa")
+player = NodePath("../..")
+
+[node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
+script = ExtResource("7_gg2mk")
 player = NodePath("../..")

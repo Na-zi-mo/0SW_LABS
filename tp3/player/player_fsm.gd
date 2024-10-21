@@ -26,10 +26,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	current_sprite.flip_h = !facing_right
 	
-	#motion.y += GRAVITY
+	motion.y += GRAVITY
 	
-	#if motion.y > MAXFALLSPEED:
-		#motion.y = MAXFALLSPEED
+	if motion.y > MAXFALLSPEED:
+		motion.y = MAXFALLSPEED
 	velocity = motion
 	move_and_slide()
 	
