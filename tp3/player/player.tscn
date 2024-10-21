@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://sjqhcj5s37fx"]
+[gd_scene load_steps=19 format=3 uid="uid://sjqhcj5s37fx"]
 
 [ext_resource type="Script" path="res://player/player_fsm.gd" id="1_rpvud"]
 [ext_resource type="Texture2D" uid="uid://cwg01dxv610t8" path="res://spritesheets/adventurer-Sheet.png" id="2_qbor4"]
 [ext_resource type="Script" path="res://state_machine.gd" id="3_axmjb"]
 [ext_resource type="Script" path="res://player/idle_state.gd" id="4_pxwst"]
 [ext_resource type="Script" path="res://player/walk_state.gd" id="5_fcpt8"]
+[ext_resource type="Script" path="res://player/jump_state.gd" id="6_5gesa"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dxclw"]
 
@@ -386,4 +387,8 @@ player = NodePath("../..")
 
 [node name="Walk" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("5_fcpt8")
+player = NodePath("../..")
+
+[node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
+script = ExtResource("6_5gesa")
 player = NodePath("../..")

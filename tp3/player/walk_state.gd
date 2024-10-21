@@ -9,6 +9,9 @@ const ACCEL = 75.0
 func manage_input() -> int:	
 	var dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left");
 
+	if player.is_on_floor() and Input.is_action_just_pressed("ui_accept"):
+		Transitioned.emit(self, "jump")
+
 	return dir
 
 func update(delta : float) -> void:
@@ -17,7 +20,7 @@ func update(delta : float) -> void:
 
 	var dir := manage_input()
 	
-	player.velocity.x = ACCEL * dir
+	player.motion.x = ACCEL * dir
 	if dir > 0:
 		player.facing_right = true
 	elif dir < 0:

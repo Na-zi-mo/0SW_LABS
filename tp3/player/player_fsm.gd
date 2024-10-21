@@ -25,6 +25,12 @@ func _ready() -> void:
 # Called every physics frame
 func _physics_process(delta: float) -> void:
 	current_sprite.flip_h = !facing_right
+	
+	#motion.y += GRAVITY
+	
+	#if motion.y > MAXFALLSPEED:
+		#motion.y = MAXFALLSPEED
+	velocity = motion
 	move_and_slide()
 	
 func get_animation_player () -> AnimationPlayer:
