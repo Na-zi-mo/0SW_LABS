@@ -2,7 +2,8 @@ extends BaseState
 class_name PlayerJump
 
 @export var player : Player
-var state_machine : AnimationNodeStateMachinePlayback 
+var anim_player : AnimationPlayer 
+ 
 @export var JUMPFORCE = 400
 @export var ACCEL = 75.0
 
@@ -11,17 +12,15 @@ func manage_input() -> int:
 	return dir
 
 func enter():
-	
-	
-	state_machine = player.get_state_machine()
-	player.state_machine.travel("jump")
+	anim_player = player.get_animation_player()
+	anim_player.play("jump")
 
 	player.motion.y = -JUMPFORCE
 	
 
 func update(delta : float) -> void:
-	if not state_machine:
-		state_machine = player.get_state_machine()
+	if not anim_player:
+		anim_player = player.get_animation_player()
 	
 	var dir := manage_input()
 	if dir > 0:

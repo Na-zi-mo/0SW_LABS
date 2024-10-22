@@ -408,6 +408,7 @@ limit_bottom = 400
 position_smoothing_enabled = true
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
 tree_root = SubResource("AnimationNodeStateMachine_a2up5")
 anim_player = NodePath("../AnimationPlayer")
 

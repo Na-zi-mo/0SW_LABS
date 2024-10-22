@@ -2,20 +2,21 @@ extends BaseState
 class_name PlayerFall
 
 @export var player : Player
-var state_machine : AnimationNodeStateMachinePlayback 
-	
+var anim_player : AnimationPlayer 
+
+
 @export var ACCEL = 75.0
 	
 func enter():
-	state_machine = player.get_state_machine()
+	anim_player = player.get_animation_player()
 
 func manage_input() -> int:	
 	var dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")	
 	return dir
 	
 func update(delta : float) -> void:
-	if not state_machine:
-		state_machine = player.get_state_machine()
+	if not anim_player:
+		anim_player = player.get_animation_player()
 	
 	var dir := manage_input()
 	if dir > 0:
@@ -29,4 +30,4 @@ func update(delta : float) -> void:
 	
 func physics_update(delta: float) -> void:
 	if not player.is_on_floor() :
-		state_machine.travel("fall")
+		anim_player.play("fall")

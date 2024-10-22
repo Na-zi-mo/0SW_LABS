@@ -2,7 +2,8 @@ extends BaseState
 class_name PlayerWalk
 
 @export var player : Player
-var state_machine : AnimationNodeStateMachinePlayback 
+var anim_player : AnimationPlayer 
+
 
 @export var ACCEL = 75.0
 
@@ -11,8 +12,8 @@ func manage_input() -> int:
 	return dir
 
 func update(delta : float) -> void:
-	if not state_machine :
-		state_machine = player.get_state_machine()
+	if not anim_player :
+		anim_player = player.get_animation_player()
 
 	var dir := manage_input()
 	
@@ -36,4 +37,4 @@ func physics_update(delta: float) -> void:
 	var dir := manage_input()
 	
 	if (player.velocity.length() > 0) :
-		player.state_machine.travel("walk")
+		anim_player.play("walk")

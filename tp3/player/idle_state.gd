@@ -2,7 +2,7 @@ extends BaseState
 class_name PlayerIdle
 
 @export var player : Player
-var state_machine : AnimationNodeStateMachinePlayback 
+var anim_player : AnimationPlayer 
 
 func manage_input() -> int:	
 	var dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left");
@@ -10,7 +10,7 @@ func manage_input() -> int:
 	return dir
 
 func enter():
-	state_machine = player.get_state_machine()
+	anim_player = player.get_animation_player()
 	
 func update(delta: float) -> void:
 	var dir = manage_input()
@@ -20,8 +20,8 @@ func update(delta: float) -> void:
 	if not player.is_on_floor() and player.velocity.y > 0 :
 		Transitioned.emit(self, "fall")
 	
-	if not state_machine :
-		state_machine = player.get_state_machine()
+	if not anim_player :
+		anim_player = player.get_animation_player()
 	
 	if dir != 0:
 		Transitioned.emit(self, "walk")
@@ -31,5 +31,5 @@ func update(delta: float) -> void:
 		Transitioned.emit(self, "attack")
 	
 func physics_update(delta: float) -> void:
-	if not state_machine : return
-	player.state_machine.travel("idle")
+	if not anim_player : return
+	anim_player.play("idle")
